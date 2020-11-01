@@ -123,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "time-series"
+    }
+  },
+  "defaultProject": "time-series",
+  "cli": {
+    "analytics": "7e6d6e18-4417-4318-939f-8fc2625f8f3e"
+  }
 }
