@@ -1,3 +1,5 @@
+import { DataGroupingOptionsObject } from 'highcharts';
+
 export const months = [
   'فروردین',
   'اردیبهشت',
@@ -38,9 +40,10 @@ export const weekDays = [
   'شنبه'
 ];
 
-export const dataGroupingWithTime = {
+export const dataGroupingWithTime: DataGroupingOptionsObject = {
   groupPixelWidth: 600,
-  approximation: 'average',
+  approximation: 'sum',
+  groupAll: true,
   units: [
     [
       'hour',
@@ -61,9 +64,10 @@ export const dataGroupingWithTime = {
   ]
 };
 
-export const dataGroupingWithoutTime = {
+export const dataGroupingWithoutTime: DataGroupingOptionsObject = {
   groupPixelWidth: 600,
-  approximation: 'average',
+  approximation: 'sum',
+  groupAll: true,
   units: [
     [
       'day',
@@ -80,4 +84,12 @@ export const dataGroupingWithoutTime = {
   ]
 };
 
+
+export const colors = [
+  '#264653',
+  '#2a9d8f',
+  '#e9c46a',
+  '#f4a261',
+  '#e76f51'
+];
 

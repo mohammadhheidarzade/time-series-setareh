@@ -2,16 +2,18 @@ export class Play {
 
   public isPause = true;
 
-  private speed = 36000;
+  private speed = 360000;
 
   private speedLevel = 1;
 
-  private baseRange = 14400000;
+  private baseRange = 24 * 60 * 60 * 1000;
 
   private interval;
 
-
-  constructor(private highChart: Highcharts.Chart, private minDate: number, private maxDate: number) { }
+  constructor(
+    private highChart: Highcharts.Chart,
+    private minDate: number,
+    private maxDate: number) { }
 
   public playPause(): void {
     if (this.isPause) {
@@ -24,13 +26,21 @@ export class Play {
 
   private play(): void {
     this.interval = setInterval(() => {
-      const { min, max } = this.highChart.axes[0].getExtremes();
+      let { min, max } = this.highChart.axes[0].getExtremes();
 
+      if (min < this.minDate) {
+        min = this.minDate;
+      }
       const zoomLevel = (max - min) / this.baseRange;
       const finalSpeed = this.speed * zoomLevel * this.speedLevel;
 
+      console.log(min, max, finalSpeed);
+
       if (!this.isPause && max + finalSpeed < this.maxDate) {
         this.highChart.axes[0].setExtremes(min + finalSpeed, max + finalSpeed, true, false);
+      } else {
+        this.isPause = !this.isPause;
+        clearInterval(this.interval);
       }
     }, 10);
   }
@@ -46,7 +56,7 @@ export class Play {
   }
 
   public speedLow(): void {
-    if (this.speedLevel !== 2 / 3){
+    if (this.speedLevel !== 2 / 3) {
       this.speedLevel *= (2 / 3);
     }
   }

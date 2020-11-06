@@ -1,12 +1,9 @@
 import * as Highcharts from 'highcharts/highstock';
-import { Component, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { TimeSeriesData } from './models/time-series-data';
-import { ReplaySubject } from 'rxjs';
-import { months, shortMonths, weekDays } from './models/constants';
+import { dataGroupingWithoutTime, dataGroupingWithTime, months, shortMonths, weekDays } from './models/constants';
 import { ManageSeries } from './models/manage-series';
-import { Series } from './models/highchart-series';
 import { Play } from './models/play';
-
 declare var JDate;
 declare function require(addr: string): any;
 
@@ -15,7 +12,7 @@ declare function require(addr: string): any;
   templateUrl: './time-series.component.html',
   styleUrls: ['./time-series.component.scss']
 })
-export class TimeSeriesComponent implements OnInit {
+export class TimeSeriesComponent implements OnInit, OnChanges {
 
 
   @Input()
@@ -25,31 +22,52 @@ export class TimeSeriesComponent implements OnInit {
   @Input()
   public hasTime = true;
   @Output()
-  public filter = new ReplaySubject<{ minDate: Date, maxDate: Date }>();
+  public filter = new EventEmitter<{ minDate: Date, maxDate: Date }>();
 
-  private highChart: Highcharts.Chart;
+  public highChart: Highcharts.Chart;
 
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options;
 
-  private playManager: Play;
+  public playManager: Play;
+
+  private manageSeries: ManageSeries;
 
   constructor() {
   }
 
-  ngOnInit(): void {
-
-    const manageSeries = new ManageSeries(this.data, this.hasTime);
-
-    const highchartSeries = manageSeries.getHighChartSeries();
-
-    this.manageGraph(highchartSeries.getSeries());
-
-    this.playManager = new Play(this.highChart, manageSeries.minDate, manageSeries.maxDate);
+  ngOnChanges(changes: SimpleChanges): void {
+    this.createGraph();
   }
 
+  ngOnInit(): void {
+    this.createGraph();
+  }
 
-  private manageGraph(series: Series[]): void {
+  private createGraph(): void {
+
+    this.manageSeries = new ManageSeries(this, this.data, this.hasTime);
+
+    this.manageGraph(this.manageSeries);
+
+    this.playManager = new Play(this.highChart, this.manageSeries.minDate, this.manageSeries.maxDate);
+
+    this.playButtonLocation();
+  }
+
+  private playButtonLocation(): void {
+    const highchartcontainer = document.getElementsByClassName('highcharts-container')[0];
+    const test = document.createElement('div');
+
+    test.setAttribute('class', 'fas fa-play-circle button');
+    test.setAttribute('style', 'left: 10px; top: 10px; z-index: 10;');
+
+    highchartcontainer.appendChild(test);
+  }
+
+  private manageGraph(series: ManageSeries): void {
+
+    require('highcharts/modules/map')(Highcharts);
 
     Highcharts.setOptions({
       lang: {
@@ -58,10 +76,14 @@ export class TimeSeriesComponent implements OnInit {
         weekdays: (weekDays),
       },
     });
-    require('highcharts/modules/map')(Highcharts);
+
     this.highChart = Highcharts.stockChart('container', {
       credits: {
         enabled: false,
+      },
+      navigator: {
+        enabled: true,
+        series: series.getNavigatorSeries().getSeries()
       },
       mapNavigation: {
         enableMouseWheelZoom: true,
@@ -69,22 +91,30 @@ export class TimeSeriesComponent implements OnInit {
       plotOptions: {
         column: {
           stacking: 'normal',
+        },
+        series: {
+          dataGrouping: this.hasTime ? dataGroupingWithTime : dataGroupingWithoutTime,
         }
       },
       chart: {
-        panning: {
-          enabled: false
-        },
         zoomType: 'x',
-        zoomKey: 'shift'
       },
       time: {
         Date: this.calendarType === 'fa' ? JDate : Date
       },
-      series: (series as any),
+      series: (series.getHighChartSeries().getSeries()),
       xAxis: {
-        minRange: 14400000,
+        minRange: 24 * 60 * 60 * 1000,
+        minTickInterval: this.hasTime ? 60 * 60 * 1000 : 24 * 60 * 60 * 1000,
         startOfWeek: 6,
+        events: {
+          afterSetExtremes: (event) => this.changeExtremes(event),
+        }
+      },
+      yAxis: {
+        opposite: false,
+        floor: 0,
+        ceiling: 100,
       },
       legend: {
         enabled: true,
@@ -93,8 +123,16 @@ export class TimeSeriesComponent implements OnInit {
         verticalAlign: 'middle',
         itemStyle: {
           fontSize: '16px',
-        }
+        },
+        maxHeight: 200
       }
+    });
+  }
+
+  private changeExtremes(event): void {
+    this.filter.emit({
+      minDate: new Date(event.min),
+      maxDate: new Date(event.max)
     });
   }
 

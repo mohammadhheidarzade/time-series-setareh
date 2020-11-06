@@ -1,0 +1,23 @@
+.button {
+  background: none;
+  border: none;
+  font-size: 34px;
+  margin: 15px;
+}
+button:focus {
+  background: none;
+  border: no ne;
+}
+
+.time-series-styles {
+  display: flex;
+}
+.graph-style {
+  flex: calc(100% - 34px);
+}
+.play-buttons-style {
+  flex: 34px;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+}

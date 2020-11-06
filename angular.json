@@ -28,7 +28,10 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/assets/fontawesome/scss/solid.scss",
+              "src/assets/fontawesome/scss/brands.scss",
+              "src/assets/fontawesome/scss/fontawesome.scss"
             ],
             "scripts": [
               "src/assets/persion-date/jdate.min.js"

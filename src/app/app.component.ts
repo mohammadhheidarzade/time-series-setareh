@@ -1,6 +1,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { TimeSeriesData } from './time-series/models/time-series-data';
+import { realData } from './time-series/read-data';
 
 @Component({
   selector: 'app-root',
@@ -13,20 +14,100 @@ export class AppComponent implements OnInit {
   data: TimeSeriesData[] = [];
 
   ngOnInit(): void {
-    for (let i = 0; i < 26000; i++) {
-      const dates = new Date(i * 60 * 60 * 1000);
+    this.data1();
+  }
+
+  data1(): void {
+    const numberOfData = 26000;
+
+    const maxDate = 3 * 365 * 24 * 60 * 60 * 1000;
+
+    const tmpData = [];
+
+    for (let i = 0; i < numberOfData; i++) {
+
+      const dates = new Date(Math.floor(Math.random() * maxDate));
       const elementIds = Math.floor(Math.random() * 3);
       const instanceGuidss = [];
 
-      for(let i = 0; i < Math.floor(Math.random() * 10) + 1; i ++ ){
-        instanceGuidss.push(i.toString());
+      for (let j = 0; j < Math.floor(Math.random() * 500) + 1; j++) {
+        instanceGuidss.push(j.toString());
       }
-      this.data.push({
+      tmpData.push({
         date: dates,
         elementId: elementIds,
         instanceGuids: instanceGuidss
       });
     }
+
+    this.data = tmpData;
   }
+
+  data2(): void {
+    const numberOfData = 500;
+
+    const maxDate = 26000 * 60 * 60 * 1000;
+
+    const tmpData = [];
+
+    for (let i = 0; i < numberOfData; i++) {
+      const dates = new Date(Math.floor(Math.random() * maxDate));
+      const elementIds = Math.floor(Math.random() * 3);
+      const instanceGuidss = [];
+
+      for (let j = 0; j < Math.floor(Math.random() * 500) + 1; j++) {
+        instanceGuidss.push(j.toString());
+      }
+      tmpData.push({
+        date: dates,
+        elementId: elementIds,
+        instanceGuids: instanceGuidss
+      });
+    }
+
+    this.data = tmpData;
+  }
+
+  data3(): void {
+    for (const data of realData) {
+      data.date = new Date(data.date) as any;
+    }
+
+    const dataTmp = [];
+
+    for (const data of realData) {
+
+      dataTmp.push({
+        elementId: 1,
+        date: data.date,
+        instanceGuids: data.instanceGuids
+      });
+      dataTmp.push({
+        elementId: 2,
+        date: data.date,
+        instanceGuids: data.instanceGuids
+      });
+      dataTmp.push({
+        elementId: 3,
+        date: data.date,
+        instanceGuids: data.instanceGuids
+      });
+      dataTmp.push({
+        elementId: 4,
+        date: data.date,
+        instanceGuids: data.instanceGuids
+      });
+
+    }
+
+    this.data = dataTmp;
+
+  }
+
+
+  getFilter(event): void {
+    // console.log('slm', event);
+  }
+
 
 }

@@ -1,21 +1,11 @@
 export class HighchartSeries {
-  constructor(private mapData: Map<number, Series>) { }
+  constructor(private mapData: Map<number, Highcharts.SeriesOptionsType>) { }
 
-  public getSeries(): Series[] {
-    const series = [];
+  public getSeries(): Highcharts.SeriesOptionsType[] {
+    const series: Highcharts.SeriesOptionsType[] = ([] as Highcharts.SeriesOptionsType[]);
     for (const value of this.mapData.values()) {
       series.push(value);
     }
     return series;
   }
-}
-
-export class Series {
-  id: number;
-  type: string;
-  name: string;
-  data: (number[])[];
-  color: string;
-  events?: any;
-  dataGrouping: any;
 }

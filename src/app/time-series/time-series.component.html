@@ -1,6 +1,22 @@
-<div id="container"></div>
-<button class="far fa-play-circle" (click)="speedLow()">low</button>
-<button (click)="playPause()"></button>
-<button (click)="speedHigh()">high</button>
+<div class="time-series-styles">
+  <div class="graph-style">
+    <div id="container"></div>
+  </div>
+  <div class="play-buttons-style">
+    <div (click)="speedHigh()" class="fas fa-angle-double-right button"></div>
 
-<i class="far fa-play-circle"></i>
+    <div
+    *ngIf="playManager.isPause"
+    (click)="playPause()"
+    class="fas fa-play-circle button"
+    ></div>
+
+    <div
+    *ngIf="!playManager.isPause"
+    (click)="playPause()"
+    class="fas fa-pause-circle button"
+    ></div>
+
+    <div class="fas fa-angle-double-left button" (click)="speedLow()"></div>
+  </div>
+</div>
