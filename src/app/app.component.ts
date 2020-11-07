@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
   }
 
   data1(): void {
-    const numberOfData = 26000;
+    const numberOfData = 1000;
 
     const maxDate = 3 * 365 * 24 * 60 * 60 * 1000;
 
@@ -26,7 +26,7 @@ export class AppComponent implements OnInit {
 
     for (let i = 0; i < numberOfData; i++) {
 
-      const dates = new Date(Math.floor(Math.random() * maxDate));
+      const dates = new Date(i * 60 * 60 * 1000);
       const elementIds = Math.floor(Math.random() * 3);
       const instanceGuidss = [];
 

@@ -40,8 +40,10 @@ export const weekDays = [
   'شنبه'
 ];
 
+const groupPixelWidthConstant = 300;
+
 export const dataGroupingWithTime: DataGroupingOptionsObject = {
-  groupPixelWidth: 600,
+  groupPixelWidth: groupPixelWidthConstant,
   approximation: 'sum',
   groupAll: true,
   units: [
@@ -65,7 +67,7 @@ export const dataGroupingWithTime: DataGroupingOptionsObject = {
 };
 
 export const dataGroupingWithoutTime: DataGroupingOptionsObject = {
-  groupPixelWidth: 600,
+  groupPixelWidth: groupPixelWidthConstant,
   approximation: 'sum',
   groupAll: true,
   units: [

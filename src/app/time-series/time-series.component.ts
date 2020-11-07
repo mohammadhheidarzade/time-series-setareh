@@ -33,9 +33,6 @@ export class TimeSeriesComponent implements OnInit, OnChanges {
 
   private manageSeries: ManageSeries;
 
-  constructor() {
-  }
-
   ngOnChanges(changes: SimpleChanges): void {
     this.createGraph();
   }
@@ -87,6 +84,7 @@ export class TimeSeriesComponent implements OnInit, OnChanges {
       },
       mapNavigation: {
         enableMouseWheelZoom: true,
+        // mouseWheelSensitivity: 5,
       },
       plotOptions: {
         column: {
@@ -113,8 +111,10 @@ export class TimeSeriesComponent implements OnInit, OnChanges {
       },
       yAxis: {
         opposite: false,
-        floor: 0,
-        ceiling: 100,
+        allowDecimals: false, /*
+        min: 0, */
+        zoomEnabled: false,
+
       },
       legend: {
         enabled: true,

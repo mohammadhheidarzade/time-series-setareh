@@ -2,11 +2,11 @@ export class Play {
 
   public isPause = true;
 
-  private speed = 360000;
+  private speed = 1.5 * 60 * 60 * 1000;
 
   private speedLevel = 1;
 
-  private baseRange = 24 * 60 * 60 * 1000;
+  private baseRange = 24 * 60 * 60 * 1000 / 5;
 
   private interval;
 
@@ -25,6 +25,9 @@ export class Play {
   }
 
   private play(): void {
+
+    const period = 10;
+
     this.interval = setInterval(() => {
       let { min, max } = this.highChart.axes[0].getExtremes();
 
@@ -32,9 +35,7 @@ export class Play {
         min = this.minDate;
       }
       const zoomLevel = (max - min) / this.baseRange;
-      const finalSpeed = this.speed * zoomLevel * this.speedLevel;
-
-      console.log(min, max, finalSpeed);
+      const finalSpeed = this.speed * zoomLevel * this.speedLevel / (1000 / period);
 
       if (!this.isPause && max + finalSpeed < this.maxDate) {
         this.highChart.axes[0].setExtremes(min + finalSpeed, max + finalSpeed, true, false);
@@ -42,7 +43,7 @@ export class Play {
         this.isPause = !this.isPause;
         clearInterval(this.interval);
       }
-    }, 10);
+    }, period);
   }
 
   private pause(): void {

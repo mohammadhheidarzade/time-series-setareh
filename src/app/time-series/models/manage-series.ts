@@ -10,12 +10,11 @@ export class ManageSeries {
   public maxDate = -1;
 
   constructor(private timeSeriesComponent: TimeSeriesComponent, private data: TimeSeriesData[], private hasTime: boolean) {
-    this.sortData();
     this.setNullData();
   }
 
   private setNullData(): void {
-
+    this.sortData();
     if (this.data.length === 0) {
       return;
     }
@@ -36,8 +35,8 @@ export class ManageSeries {
         nullObjects.push(nullObject);
       }
     }
-
     this.data = this.data.concat(nullObjects);
+    this.sortData();
   }
 
   private sortData(): void {
@@ -141,6 +140,10 @@ export class ManageSeries {
   private changeColor(event: SeriesLegendItemClickEventObject, seriesNumber: number): boolean {
 
     if ((event.browserEvent.target as any).tagName === 'rect') {
+
+
+
+
 
       this.timeSeriesComponent.highChart.series[seriesNumber].update({
         color: '#e9c46a',
