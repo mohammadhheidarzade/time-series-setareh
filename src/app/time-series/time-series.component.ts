@@ -1,7 +1,7 @@
 import * as Highcharts from 'highcharts/highstock';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { TimeSeriesData } from './models/time-series-data';
-import { dataGroupingWithoutTime, dataGroupingWithTime, months, shortMonths, weekDays } from './models/constants';
+import { dataGroupingWithoutTime, dataGroupingWithTime, defaultMonths, defaultShortMonths, defaultWeekDays, months, shortMonths, weekDays } from './models/constants';
 import { ManageSeries } from './models/manage-series';
 import { Play } from './models/play';
 declare var JDate;
@@ -68,9 +68,11 @@ export class TimeSeriesComponent implements OnInit, OnChanges {
 
     Highcharts.setOptions({
       lang: {
-        months: (months),
-        shortMonths: (shortMonths),
-        weekdays: (weekDays),
+        months: this.calendarType === 'en' ? defaultMonths : months,
+        shortMonths: this.calendarType === 'en' ? defaultShortMonths : shortMonths,
+        weekdays: this.calendarType === 'en' ? defaultWeekDays : weekDays,
+        rangeSelectorFrom: this.calendarType === 'en' ? 'From' : 'از',
+        rangeSelectorTo: this.calendarType === 'en' ? 'To' : 'تا',
       },
     });
 
@@ -82,9 +84,47 @@ export class TimeSeriesComponent implements OnInit, OnChanges {
         enabled: true,
         series: series.getNavigatorSeries().getSeries()
       },
+      rangeSelector: {
+        buttonTheme: { // styles for the buttons
+          fill: 'none',
+          stroke: 'none',
+          'stroke-width': 0,
+          r: 8,
+          style: {
+            color: '#039',
+            fontWeight: 'bold',
+          },
+          states: {
+            hover: {
+            },
+            select: {
+              fill: '#039',
+              style: {
+                color: 'white'
+              }
+            }
+            // disabled: { ... }
+          }
+        },
+        labelStyle: {
+          color: 'silver',
+          fontWeight: 'bold'
+        },
+        /* buttons: [
+          {
+            type: 'year',
+            count: 1,
+            text: 'adlfkaj;fd',
+          },
+          {
+            type: 'ytd',
+            count: 1,
+            text: 'safskdfj'
+          }
+        ] */
+      },
       mapNavigation: {
         enableMouseWheelZoom: true,
-        // mouseWheelSensitivity: 5,
       },
       plotOptions: {
         column: {
@@ -104,15 +144,14 @@ export class TimeSeriesComponent implements OnInit, OnChanges {
       xAxis: {
         minRange: 24 * 60 * 60 * 1000,
         minTickInterval: this.hasTime ? 60 * 60 * 1000 : 24 * 60 * 60 * 1000,
-        startOfWeek: 6,
+        startOfWeek: this.calendarType === 'en' ? 1 : 6,
         events: {
           afterSetExtremes: (event) => this.changeExtremes(event),
         }
       },
       yAxis: {
         opposite: false,
-        allowDecimals: false, /*
-        min: 0, */
+        allowDecimals: false,
         zoomEnabled: false,
 
       },

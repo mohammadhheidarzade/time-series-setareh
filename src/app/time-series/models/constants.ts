@@ -15,6 +15,21 @@ export const months = [
   'اسفند'
 ];
 
+export const defaultMonths = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December'
+];
+
 export const shortMonths = [
   'فروردین',
   'اردیبهشت',
@@ -30,6 +45,21 @@ export const shortMonths = [
   'اسفند'
 ];
 
+export const defaultShortMonths = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec'
+];
+
 export const weekDays = [
   'یکشنبه',
   'دوشنبه',
@@ -38,6 +68,16 @@ export const weekDays = [
   'پنج شنبه',
   'جمعه',
   'شنبه'
+];
+
+export const defaultWeekDays = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday'
 ];
 
 const groupPixelWidthConstant = 300;

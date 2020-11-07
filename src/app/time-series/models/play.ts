@@ -38,6 +38,8 @@ export class Play {
       const finalSpeed = this.speed * zoomLevel * this.speedLevel / (1000 / period);
 
       if (!this.isPause && max + finalSpeed < this.maxDate) {
+        console.log(max - min);
+
         this.highChart.axes[0].setExtremes(min + finalSpeed, max + finalSpeed, true, false);
       } else {
         this.isPause = !this.isPause;
