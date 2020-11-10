@@ -135,3 +135,50 @@ export const colors = [
   '#e76f51'
 ];
 
+export const rangeSelectorButtons: Highcharts.RangeSelectorButtonsOptions[] = [{
+  type: 'month',
+  count: 1,
+  text: 'یک ماه اخیر'
+}, {
+  type: 'month',
+  count: 3,
+  text: 'سه ماه اخیر'
+}, {
+  type: 'month',
+  count: 6,
+  text: 'شش ماه اخیر'
+}, {
+  type: 'ytd',
+  text: 'سال پایانی'
+}, {
+  type: 'year',
+  count: 1,
+  text: 'یک سال اخیر'
+}, {
+  type: 'all',
+  text: 'کل'
+}];
+
+
+export const rangeSelectorButtonsTheme: Highcharts.SVGAttributes = {
+  width: null,
+  fill: 'none',
+  stroke: 'none',
+  'stroke-width': 0,
+  r: 8,
+  style: {
+    color: '#039',
+    fontWeight: 'bold',
+  },
+  states: {
+    hover: {
+    },
+    select: {
+      fill: '#039',
+      style: {
+        color: 'white'
+      }
+    }
+  }
+
+};

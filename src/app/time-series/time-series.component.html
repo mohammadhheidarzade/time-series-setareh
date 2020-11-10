@@ -3,20 +3,22 @@
     <div id="container"></div>
   </div>
   <div class="play-buttons-style">
-    <div (click)="speedHigh()" class="fas fa-angle-double-right button"></div>
 
-    <div
-    *ngIf="playManager.isPause"
-    (click)="playPause()"
-    class="fas fa-play-circle button"
-    ></div>
+    <div class="button">
+      <div (click)="speedHigh()" class="fas fa-angle-double-right"></div>
+    </div>
 
-    <div
-    *ngIf="!playManager.isPause"
-    (click)="playPause()"
-    class="fas fa-pause-circle button"
-    ></div>
+    <div class="button" *ngIf="playManager.isPause">
+      <div (click)="playPause()" class="fas fa-play"></div>
+    </div>
 
-    <div class="fas fa-angle-double-left button" (click)="speedLow()"></div>
+    <div class="button" *ngIf="!playManager.isPause">
+      <div (click)="playPause()" class="fas fa-pause"></div>
+    </div>
+
+    <div class="button">
+      <div id="slm" class="fas fa-angle-double-left" (click)="speedLow()"></div>
+    </div>
+
   </div>
 </div>

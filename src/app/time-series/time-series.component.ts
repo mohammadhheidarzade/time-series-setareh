@@ -1,7 +1,17 @@
 import * as Highcharts from 'highcharts/highstock';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { TimeSeriesData } from './models/time-series-data';
-import { dataGroupingWithoutTime, dataGroupingWithTime, defaultMonths, defaultShortMonths, defaultWeekDays, months, shortMonths, weekDays } from './models/constants';
+import {
+  dataGroupingWithoutTime,
+  dataGroupingWithTime,
+  defaultMonths,
+  defaultShortMonths,
+  defaultWeekDays,
+  months,
+  rangeSelectorButtons,
+  rangeSelectorButtonsTheme,
+  shortMonths, weekDays
+} from './models/constants';
 import { ManageSeries } from './models/manage-series';
 import { Play } from './models/play';
 declare var JDate;
@@ -65,6 +75,7 @@ export class TimeSeriesComponent implements OnInit, OnChanges {
   private manageGraph(series: ManageSeries): void {
 
     require('highcharts/modules/map')(Highcharts);
+    console.log(series);
 
     Highcharts.setOptions({
       lang: {
@@ -73,8 +84,13 @@ export class TimeSeriesComponent implements OnInit, OnChanges {
         weekdays: this.calendarType === 'en' ? defaultWeekDays : weekDays,
         rangeSelectorFrom: this.calendarType === 'en' ? 'From' : 'از',
         rangeSelectorTo: this.calendarType === 'en' ? 'To' : 'تا',
+        rangeSelectorZoom: ''
       },
     });
+
+    if (document.getElementById('container') === undefined) {
+      return;
+    }
 
     this.highChart = Highcharts.stockChart('container', {
       credits: {
@@ -85,43 +101,20 @@ export class TimeSeriesComponent implements OnInit, OnChanges {
         series: series.getNavigatorSeries().getSeries()
       },
       rangeSelector: {
-        buttonTheme: { // styles for the buttons
-          fill: 'none',
-          stroke: 'none',
-          'stroke-width': 0,
-          r: 8,
-          style: {
-            color: '#039',
-            fontWeight: 'bold',
-          },
-          states: {
-            hover: {
-            },
-            select: {
-              fill: '#039',
-              style: {
-                color: 'white'
-              }
-            }
-            // disabled: { ... }
-          }
+        buttonTheme: rangeSelectorButtonsTheme,
+        inputDateParser: (value) => {
+          const currentDateClass = this.calendarType === 'fa' ? JDate : Date;
+          const date = new currentDateClass(value);
+          return date.getTime() - date.getTimezoneOffset() * 60 * 1000;
         },
         labelStyle: {
           color: 'silver',
           fontWeight: 'bold'
         },
-        /* buttons: [
-          {
-            type: 'year',
-            count: 1,
-            text: 'adlfkaj;fd',
-          },
-          {
-            type: 'ytd',
-            count: 1,
-            text: 'safskdfj'
-          }
-        ] */
+        buttons: rangeSelectorButtons,
+        inputStyle: {
+          fontFamily: 'byekan'
+        }
       },
       mapNavigation: {
         enableMouseWheelZoom: true,
@@ -138,7 +131,8 @@ export class TimeSeriesComponent implements OnInit, OnChanges {
         zoomType: 'x',
       },
       time: {
-        Date: this.calendarType === 'fa' ? JDate : Date
+        Date: this.calendarType === 'fa' ? JDate : Date,
+        useUTC: true
       },
       series: (series.getHighChartSeries().getSeries()),
       xAxis: {
@@ -155,6 +149,9 @@ export class TimeSeriesComponent implements OnInit, OnChanges {
         zoomEnabled: false,
 
       },
+      tooltip: {
+        useHTML: true,
+      },
       legend: {
         enabled: true,
         align: 'left',
@@ -163,10 +160,24 @@ export class TimeSeriesComponent implements OnInit, OnChanges {
         itemStyle: {
           fontSize: '16px',
         },
-        maxHeight: 200
+        maxHeight: 200,
+        useHTML: true,
+        labelFormatter: function () {
+          const imageAddress = 'http://icons.iconarchive.com/icons/visualpharm/must-have/256/Check-icon.png';
+          const width = 15;
+          const height = 15;
+
+          // todo get image Address
+
+
+          const image = `<img src=${imageAddress} width="${width}" height="${height}">`;
+          return image
+            + this.name;
+        }
       }
     });
   }
+
 
   private changeExtremes(event): void {
     this.filter.emit({

@@ -14,13 +14,11 @@ export class AppComponent implements OnInit {
   data: TimeSeriesData[] = [];
 
   ngOnInit(): void {
-    this.data1();
+    this.data3();
   }
 
   data1(): void {
     const numberOfData = 1000;
-
-    const maxDate = 3 * 365 * 24 * 60 * 60 * 1000;
 
     const tmpData = [];
 

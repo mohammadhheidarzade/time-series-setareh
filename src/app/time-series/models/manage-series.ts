@@ -15,6 +15,7 @@ export class ManageSeries {
 
   private setNullData(): void {
     this.sortData();
+
     if (this.data.length === 0) {
       return;
     }
@@ -100,6 +101,10 @@ export class ManageSeries {
         tmpMapData.set(data.elementId, { data: [] as number[][] });
       }
 
+      if (!this.hasTime) {
+        data.date = new Date(Date.UTC(data.date.getFullYear(), data.date.getMonth(), data.date.getDay()));
+      }
+
       if (data.instanceGuids !== null) {
         tmpMapData.get(data.elementId).data.push([data.date.getTime(), data.instanceGuids.length]);
       } else {
@@ -112,7 +117,7 @@ export class ManageSeries {
       const tmpI = i;
       mapData.set(key, {
         id: key + '',
-        name: key + '',
+        name: 'هواپیمایی',
         type: 'column',
         showInNavigator: false,
         data: value.data,
@@ -120,10 +125,12 @@ export class ManageSeries {
         events: {
           legendItemClick: (event) => this.changeColor(event, tmpI)
         },
-        dataGrouping: this.hasTime ? dataGroupingWithTime : dataGroupingWithoutTime,
+        dataGrouping: this.hasTime ? dataGroupingWithTime : dataGroupingWithoutTime ,
       });
       i++;
     }
+
+
 
     return mapData;
   }
@@ -142,7 +149,7 @@ export class ManageSeries {
     if ((event.browserEvent.target as any).tagName === 'rect') {
 
 
-
+      // todo colors
 
 
       this.timeSeriesComponent.highChart.series[seriesNumber].update({

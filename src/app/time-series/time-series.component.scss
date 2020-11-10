@@ -1,23 +1,51 @@
-.button {
-  background: none;
-  border: none;
-  font-size: 34px;
-  margin: 15px;
-}
-button:focus {
-  background: none;
-  border: no ne;
-}
-
 .time-series-styles {
   display: flex;
 }
+
 .graph-style {
   flex: calc(100% - 34px);
 }
+
+.fa,
+.fas,
+.far,
+.fal,
+.fad,
+.fab {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  line-height: 1;
+}
+
 .play-buttons-style {
   flex: 34px;
   display: flex;
   flex-flow: column;
   justify-content: center;
 }
+
+div.button {
+  font-size: 15px;
+  border-radius: 50%;
+  color: white;
+  background-color: gray;
+  padding: 10px;
+  text-align: center;
+  margin: 10px;
+}
+
+div.button :hover {
+  font-size: 15px;
+  border-radius: 50%;
+  color: gray;
+  background-color: white;
+  padding: 10px;
+  text-align: center;
+  margin: 10px;
+}
+
+
